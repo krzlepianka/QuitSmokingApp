@@ -1,0 +1,89 @@
+.login  {
+    font-family: $main-font-size;
+    height: 100vh;
+    background-image: linear-gradient(to right, #8C1111, rgb(248, 58, 58));
+    &__container {
+        @include response(small) {
+            @include flex-box(column-reverse, center, center);
+        }
+        height: 100%;
+        @include flex-box(row, center, center); 
+    }
+    &__item {
+        @include flex-box(column, center, center); 
+        @include response(small) {
+            height: auto;
+        }
+    }
+    &__logo {
+        height: 15rem;
+    }
+    &__app-description {
+        @include shadow();
+        width: 40rem;
+        height: 40rem;
+        p {
+            padding: 0 3rem;
+        }
+    }
+    &__form-container {
+        width: 40rem;
+        height: 45rem;
+        @include shadow();
+    }
+    .form {
+        text-align: center;
+        width: 70%;
+        @include flex-box(column, center, center); 
+        &__label {
+            padding: 2rem;
+            align-self: stretch;
+        }
+        &__input {
+            align-self: stretch;
+        }
+        &__input--login,
+        &__input--email,
+        &__input--password {
+            border: none;
+            border-bottom: solid black 1px;
+        }
+        &__input:focus {
+            outline:none;
+        }
+        &__checkbox-wraper {
+            display: flex;            
+            justify-content: space-around;
+            width: 100%;
+            padding: 2rem 0px;
+        }
+        &__button {
+            &:focus {
+                outline:none;
+            }
+            margin-top: 3rem;
+            text-transform: uppercase;
+            border:none;
+            width: 20rem;
+            height: 4rem;
+            color: $white-color;
+            background-image: linear-gradient(to right, rgb(140, 17, 17), rgb(247, 58, 58));
+            cursor: pointer;
+            transition: ease-out 1s;
+            &:hover {
+                border-radius: 1rem;
+            }
+        }
+    }
+}
+
+.green {
+    border: none;
+    border-bottom: solid green 1px;
+}
+
+.red {
+    border: none;
+    border-bottom: solid red 1px;
+}
+

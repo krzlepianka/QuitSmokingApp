@@ -1,0 +1,31 @@
+@mixin flex-box( $flex-direction, $justify-content, $align-items) {
+    display: flex;
+    flex-direction :$flex-direction; 
+    justify-content: $justify-content;
+    align-items: $align-items;
+}
+
+@mixin shadow {
+    background-color: $white-color;
+    -webkit-box-shadow: -8px -7px 50px -17px rgba(0,0,0,0.75);
+    -moz-box-shadow: -8px -7px 50px -17px rgba(0,0,0,0.75);
+    box-shadow: -8px -7px 50px -17px rgba(0,0,0,0.75);
+}
+
+@mixin response($breakpoint) {
+    @if $breakpoint == small {
+        @media (max-width: 37.5em) {
+            @content;
+        }
+    }
+    @if $breakpoint == medium {
+        @media (max-width: 75rem) {
+            @content;
+        }
+    }
+    @if $breakpoint == large {
+        @media (max-width: 112.5em) {
+            @content;
+        }
+    }
+}

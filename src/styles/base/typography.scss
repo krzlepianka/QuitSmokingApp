@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css?family=Nunito&display=swap');
+
+.heading-primary {
+    backface-visibility: hidden;
+    &--main {
+        display: block;
+        font-size: 10rem;
+        font-weight: 400;
+        letter-spacing: 3.5rem;
+        @include response(small) {
+            letter-spacing: 1rem;
+            font-size: 5rem;
+        }
+    }
+    &--sub {
+        display: block;
+        font-size: 2rem;
+        @include response(small) {
+            letter-spacing: .5rem;
+            font-size: 1.5rem;
+        }
+    }
+} 
+
+.heading-secondary {
+    font-size: 3.5rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: .2rem;
+    @include response(small) {
+        font-size: 2.5rem;
+    }
+
+    @include response(medium) {
+        font-size: 3rem;
+    }
+}
+
+.heading-tertiary {
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.paragraph {
+    font-size: 1.3rem; 
+}
+
+
+
+
+
+html {
+    font-size: 62.5%; //1rem == 10px, 10/16 == 62.5%
+    @include response(large) {
+        font-size: 75%;  //1rem == 1rem == 12px 10/16 = 75%
+    }
+
+    @include response(medium) {
+        font-size: 50%; //1rem == 8px 10/8 = 50%
+    }
+
+    @include response(small) {
+        font-size: 43.75%; //1rem == 7px 10/7 = 43.75%
+    }
+}

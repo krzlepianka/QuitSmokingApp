@@ -1,0 +1,16 @@
+.header {
+    font-size: 1.5rem;
+    font-weight: 400;
+    background: $white-color;
+    line-height: 3rem;
+    &__list {
+    }
+    &__item {
+        text-decoration: none;
+    }
+    &__link {
+        text-decoration: none;
+        color: $red-color;
+    }
+}
+
