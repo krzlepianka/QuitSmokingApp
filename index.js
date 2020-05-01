@@ -7,6 +7,7 @@ const api = express.Router();
 const mongoose = require('mongoose');
 const userController = require('./api/user');
 const authController = require('./api/auth');
+const path = require('path');
 
 const { PORT, DB_CONNECTION_STRING } = process.env;
 
@@ -28,8 +29,7 @@ api.use('/user', userController);
 api.use('/auth', authController);
 app.use("/api", api);
 
-
-
+app.use(express.static(path.resolve('build')));
 
 app.listen(PORT, () => {
     console.log(`server is running on port ${PORT}`)
