@@ -1,11 +1,22 @@
 .container {
     height: 100vh;
-    background-image: linear-gradient(to right, #8C1111, #f83a3a);
+    background-image: linear-gradient(to right, $red-color-1, $red-color-2);
+    @include response(small) {
+        height: 100%;
+    }
     .users {
         width: 100%;
         height: 100%;
         @include flex-box(row, space-around, center);  
         align-items: center;
+        @include response(medium) {
+            @include flex-box(column, space-around, center);
+        }
+
+        @include response(small) {
+            @include flex-box(column, space-around, center);
+            height: auto;
+        }
         &__item {
             @include shadow;
             cursor: pointer;
@@ -14,6 +25,9 @@
             width: 25rem;
             @include flex-box(column, center, center); 
             border-radius: 1rem;
+            @include response(small) {
+                margin: 4rem 0 4rem 0;
+            }
         }
         &__title {
             padding: 0 3rem;
@@ -26,7 +40,7 @@
         }
         &__info {
             margin-top: 1.2rem;
-            color: $red-color;
+            color: $red-color-3;
             font-weight: 600;
         }
         &__container-info {

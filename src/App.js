@@ -1,15 +1,12 @@
 import React, {Component} from 'react';
-import NavBar from 'components/NavBar';
 import UserPage from 'components/UserPage';
 import UserInfoPage from 'components/UserInfoPage';
 import RegistrationForm from 'components/RegistrationForm';
 import LoginForm from 'components/LoginForm';
 import 'styles/mainStylesheet/mainStylesheet.scss';
-import {Switch, Route} from 'react-router-dom';
-import WithAuthentication from 'components/WithAuthentication';
-
-
-
+import {Switch, Route, Redirect} from 'react-router-dom';
+import WithAuthentication from 'components/shared/hoc/withAuthentication';
+import withNavbar from 'components/shared/hoc/withNavbar';
 
 
 class App extends Component {
@@ -17,19 +14,18 @@ class App extends Component {
     return(
       <div>
         <Switch>
-          <Route path='/dashboard'  component={WithAuthentication(UserInfoPage)}/>
-          {/*<Route path='/dashboard'  component={UserInfoPage}/>*/}
+          <Route path='/dashboard'  component={(WithAuthentication(withNavbar(UserInfoPage)))}/>
           <Route path='/registration' component={RegistrationForm} />
-          <Route path='/addicition-form' component={WithAuthentication(UserPage)} />
-          {/*<Route path='/addicition-form' component={UserPage} />*/}
-          <Route exact path='/login' component={LoginForm} />
+          <Route path='/addicition-form' component={WithAuthentication(withNavbar(UserPage))}/>
+          <Route path="/login" component={LoginForm} />
+          <Route exact path="/" render={() => (
+            <Redirect to="/login"/>
+          )}/>
         </Switch>
       </div>
     )
   }
 }
-
-//zadanie domowe - opanuj flexa i zrób layout
 
 
 export default App;

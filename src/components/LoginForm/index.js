@@ -8,170 +8,124 @@ class LoginForm extends React.Component {
             login: '', 
             password: '', 
             email: '', 
-            formValid: null,
-            valid: {
-    
-            },
-            errors: {
-    
+            formsErrors: {
+                
             }
         }
+        
         localStorage.removeItem('JWT_TOKEN');
-    }
-
-
-    handleChange = e => {
-        let name = e.target.name;
-        let value = e.target.value;
-        this.setState({
-            [name]: value
-        })
-    } 
-    
-    validateLogin = () => {
-        let validLogin = false;
-        let errorLoginMessage = '';
-        const {login} = this.state;
-        if(!login) {
-            validLogin = false;
-            errorLoginMessage = 'wypełnij pole';
-            return {validLogin, errorLoginMessage}
-        }
-        else if(login.length < 4) {
-            validLogin = false;
-            errorLoginMessage = 'podany login jest za krótki';
-            return {validLogin, errorLoginMessage}
-        }
-        else if(login.indexOf(' ') !== -1) {
-            validLogin = false;
-            errorLoginMessage = 'login nie może zawierać spacji'
-            return {validLogin, errorLoginMessage}
-        }
-        else {
-            validLogin = true;
-            errorLoginMessage = ''
-            return {validLogin, errorLoginMessage}
-        }
-    }
-
-    validatePassword = () => {
-        const {password} = this.state;
-        let validPassword = false;
-        let errorPasswordMessage = ''
-        if(!password) {
-            validPassword = false;
-            errorPasswordMessage = 'uzupełnij swoje hasło';
-            return {validPassword, errorPasswordMessage};
-        }
-        else if(password.indexOf(' ') !== -1) {
-            validPassword = false;
-            errorPasswordMessage = 'hasło nie może zawierać spacji';
-            return {validPassword, errorPasswordMessage};
-        }
-        else if(password.length < 8) {
-            validPassword = false;
-            errorPasswordMessage = 'hasło nie może być krótsze niż 8 znaków';
-            return {validPassword, errorPasswordMessage};
-        }
-        else {
-            validPassword = true;
-            errorPasswordMessage = '';
-            return {validPassword, errorPasswordMessage};
-        }
-    }
-
-    validateEmail = () => {
-        const { email } = this.state;
-        let validEmail = false;
-        let errorEmailMessage = '';
-        if(!email) {
-            validEmail = false;
-            errorEmailMessage = 'uzupełnij pole';
-            return {validEmail, errorEmailMessage};
-        }
-        if(email.indexOf('@') === -1) {
-            validEmail = false;
-            errorEmailMessage = 'wpisz poprawny adres z @';
-            return {validEmail, errorEmailMessage};
-        }
-        else {
-            validEmail = true;
-            errorEmailMessage = '';
-            return {validEmail, errorEmailMessage};
-        }
-    }
-
-    validateForm = () => {
-        let loginValidResult = this.validateLogin();
-        let passwordValidResult = this.validatePassword();
-        let emailValidResult = this.validateEmail()
-        let errors = {
-            login: loginValidResult.errorLoginMessage,
-            password: passwordValidResult.errorPasswordMessage,
-            email: emailValidResult.errorEmailMessage
-        }
-        let valid = {
-            validateLogin: loginValidResult.validLogin,
-            validatePassword: passwordValidResult.validPassword,
-            validateEmail: emailValidResult.validEmail
-        }
-        const isValid = valid.validateLogin && valid.validatePassword && valid.validateEmail;
-
-        if (!isValid) {
-            this.setState({
-                errors,
-                valid
-            })
-        }
-        return true;
-    }
-
-    handleSubmitForm = e => {
-        e.preventDefault();
-        if(this.validateForm()) {
-            let User = {
-                login: this.state.login,
-                password: this.state.password,
-                email: this.state.email
-            }
-            fetch(`${process.env.REACT_APP_API}/auth/login`, 
-                {
-                method: 'POST', // or 'PUT'
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(User)
-                }).then(response => {
-                    if(response.status !== 200) {
-                        return false;
-                    }
-                    return response.json()
-                })
-                .then((data) => {
-                    if (data.token) {
-                        localStorage.setItem('JWT_TOKEN', data.token);
-                        console.log(this.props.history)
-                        this.props.history.push('/addicition-form');
-                    }
-                    
-                })
-                .catch((error) => {
-                    console.error('Error:', error)
-                });
-                this.setState({
-                    login: '',
-                    password: '',
-                    email: ''
-                })
-        }
     }
 
     handleRedirectToLoginRegistrationForm = (path) => {
         this.props.history.push(path)
     }
+    
+    formValid = ({formsErrors, ...rest}) => {
+        let valid = false;
+        let loginError = formsErrors.login;
+        let passwordError = formsErrors.password;
+        let emailError = formsErrors.email;
+        if((loginError > 0 || loginError === undefined) || (passwordError > 0 || loginError === undefined)  || (emailError > 0 || loginError === undefined)) {
+            valid = false;
+            return valid;
+        }
+        else {
+            valid = true;
+            return valid;
+        }
+    };
+
+    handleForm = (login, password, email) => {
+        if(!login  && !password && !email) {
+            let formsErrors = this.state.formsErrors;
+            formsErrors.credentials = 'uzupełnij wymagane pola';
+            this.setState({
+                formsErrors
+            })
+        }
+    }
+
+    handleSubmit = e => {
+        e.preventDefault();
+        const {login, password, email} = this.state;
+        if(this.formValid(this.state)) {
+                let User = {
+                    login: login,
+                    password: password,
+                    email: email
+                }
+                fetch(`${process.env.REACT_APP_API}auth/login`, 
+                    {
+                    method: 'POST', 
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(User)
+                    }).then(response => {
+                        if(response.status > 400) {
+                            let formsErrors = this.state.formsErrors;
+                            formsErrors.credentials = 'podałeś błędne dane logowania';
+                            this.setState({
+                            formsErrors
+                })
+                            
+                        }
+                        return response.json()
+                    })
+                    .then((data) => {
+                        if (data.token) {
+                            localStorage.setItem('JWT_TOKEN', data.token);
+                            this.props.history.push('/addicition-form');
+                        }
+                        
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error)
+                    });
+    
+                    this.setState({
+                        login: '',
+                        password: '',
+                        email: '',
+                        formsErrors: {}
+                    })
+            }
+            else {
+                this.handleForm(login, password, email);
+            }
+
+    }
+
+    handleChange = e => {
+        e.preventDefault();
+        const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
+        const {name, value} = e.target;
+        let formsErrors = this.state.formsErrors;
+        switch(name) {
+            case 'login':
+            formsErrors.login = value.length < 5 && value.length > 0 || !value.length
+            ? 'uzupełnij pole(minimum 6 znaków)' 
+            : '';
+            break;
+            case 'password':
+            formsErrors.password = value.length < 5 && value.length > 0 || !value.length
+            ? 'uzupełnij pole(minimum 6 znaków)'
+            : '';
+            break;
+            case 'email':
+            formsErrors.email = emailRegex.test(value) !== true || !value.length
+            ? 'adres mailowy jest niepoprawny' 
+            : '';
+            break;
+            default:
+            break;
+        }
+
+        this.setState({formsErrors, [name] : value})
+    }
 
     render() {
-        const {login, password, email, errors} = this.state;
+        const {login, password, email, formsErrors} = this.state;
         return(
             <div className="login">
                 <div className="login__container">
@@ -183,28 +137,29 @@ class LoginForm extends React.Component {
                         życia oraz jak długo udało Ci się nie zapalić papierosa.</p>
                     </div>
                     <div className="login__item login__form-container">
-                        <form onSubmit={this.handleSubmitForm} className="form">
+                        <form onSubmit={this.handleSubmit} className="form">
                             <label className="form__label form__label--login paragraph">login</label>
                             <input
                                 onChange={this.handleChange} 
                                 name="login"
                                 value={login}
                                 className="form__input form__input--login"/>
-                                {errors['login'] && <label>{errors.login}</label>}
+                                {formsErrors['login'] && <label>{formsErrors.login}</label>}
                             <label className="form__label form__label--email paragraph">e-mail</label>
                             <input
                                 onChange={this.handleChange} 
                                 value={email} 
                                 name="email"
                                 className="form__input form__input--email"/>
-                                {errors['email'] && <label>{errors.email}</label>}
+                                {formsErrors['email'] && <label>{formsErrors.email}</label>}
                             <label className="form__label form__label--password paragraph">hasło</label>
                             <input
                                 onChange={this.handleChange} 
                                 value={password}
                                 name="password" 
                                 className="form__input form__input--password"/>
-                                {errors['password'] && <label>{errors.password}</label>}
+                                {formsErrors['password'] && <label>{formsErrors.password}</label>}
+                                {formsErrors['credentials'] && <label>{formsErrors.credentials}</label>}
                             <input className="form__button paragraph" type="submit" value="zaloguj" />
                             <p className="paragraph">Nie masz jeszcze konta?
                                 <span className="bold-addition-style" 

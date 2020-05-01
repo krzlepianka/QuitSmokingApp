@@ -14,7 +14,7 @@ class UserPage extends React.Component {
     }
 }
 
-    checkIfNewUser = () => {
+   checkIfNewUser = () => {
         fetch(`${process.env.REACT_APP_API}user`)
         .then(response => response.json())
         .catch(error => console.log('error', error))
@@ -42,28 +42,19 @@ class UserPage extends React.Component {
         let validValue = false;
         let errorMessage = '';
         if(!input) {
-            //validValue = false;
             return 'uzupełnij pole'
-            
-            //return {validValue, errorMessage}
         }
         if(input === "0") {
             return 'podaj liczbę większą niż 0';
         }
         if (!typeof input === 'number') {
-            //validValue = false;
             return `${input} is not a number`
-            
-            ////return {validValue, errorMessage}
+
         }
         if(input < 0) {
-            //validValue = false;
             return `${input} jest mniejszy od zera`
-
-            //return {validValue, errorMessage}
         }
         else {
-            //validValue = true;
             return ``
             
         }

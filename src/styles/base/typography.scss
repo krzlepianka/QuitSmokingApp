@@ -45,21 +45,22 @@
     font-size: 1.3rem; 
 }
 
-
-
+.paragraph-small {
+    font-size: 1.2rem; 
+}
 
 
 html {
-    font-size: 62.5%; //1rem == 10px, 10/16 == 62.5%
+    font-size: 62.5%; 
     @include response(large) {
-        font-size: 75%;  //1rem == 1rem == 12px 10/16 = 75%
+        font-size: 62.5%; 
     }
 
     @include response(medium) {
-        font-size: 50%; //1rem == 8px 10/8 = 50%
+        font-size: 50%; 
     }
 
     @include response(small) {
-        font-size: 43.75%; //1rem == 7px 10/7 = 43.75%
+        font-size: 43.75%; 
     }
 }

@@ -1,18 +1,21 @@
 .header {
     @include flex-box(none, flex-end, none);
-    background: $reed;
+    background: $white-color;
     &__list {
         list-style-type: none;
         width: 100%;
         @include flex-box(none, flex-end, none);
         padding-right: 5rem;
+        line-height: 5rem;
     }
     &__item {
         padding-right: 4rem;
-        color: $white-color;
+        font-weight: 500;
+        font-size: 2rem;
+        color: $black-color;
         cursor: pointer;
         &:hover {
-            color: $black-color;
+            color: $red-color-4;
             transition: 1s;
             
         }    

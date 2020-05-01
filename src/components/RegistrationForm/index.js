@@ -1,6 +1,5 @@
 import React from 'react';
 import smokingLogo from '../../styles/images/ss.png'
-import { Redirect } from 'react-router-dom';
 
 class RegistrationForm extends React.PureComponent {
 
@@ -10,7 +9,13 @@ class RegistrationForm extends React.PureComponent {
         password: '',
         email: '',
         formValid: null,
+        formsErrors: {
+            login: '',
+            password: '',
+            email: ''
+        },
         errors: {
+        
         },
         valid: {
 
@@ -132,7 +137,6 @@ class RegistrationForm extends React.PureComponent {
 
     handleSubmitForm = e => {
         e.preventDefault();
-        /* skip unneccessary render by changing handleSubmitForm to: if (this.validateForm() // true or false) { submit... } */
         this.validateForm(e);
         if(this.state.formValid) {
             let newUser = {
@@ -141,7 +145,7 @@ class RegistrationForm extends React.PureComponent {
                 email: this.state.email
             }
             fetch(`${process.env.REACT_APP_API}auth/register`, {
-                method: 'POST', // or 'PUT'
+                method: 'POST', 
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -162,8 +166,6 @@ class RegistrationForm extends React.PureComponent {
                 })
         }
     }
-
-
 
 
     render() {

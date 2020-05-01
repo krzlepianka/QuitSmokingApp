@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 
 router.post('/login', (req, res) => {
     const errors = {};
-    const {login, password} = req.body;
+    const {login, password, email} = req.body;
     let hash;
     try {
         hash = crypto.createHash('md5').update(password).digest("hex");
@@ -17,19 +17,19 @@ router.post('/login', (req, res) => {
             errors
         })
     }
-    console.log('login = ', login, ', hash = ', hash, login.length)
-    User.find({login}, (err, users) => {
-        console.log('users = ', users);
+    User.find({login, email}, (err, users) => {
         const user = users[0];
-        if(!user) {
+        if(!user && !email && !password) {
+            console.log('error', err)
             errors.user = "Couldn't find user";
             res.status(404).json(errors);
         } else if(err) {
             errors.user = err;
             res.status(500).json(errors);
+            console.error(err);
         }
         else {
-            if (user && user.hash === hash) {
+            if (user && user.hash === hash && email) {
                 const token = jwt.sign({
                     exp: Math.floor(Date.now() / 1000) + (Number(process.env.AUTH_EXP)),
                     data: {
@@ -40,7 +40,7 @@ router.post('/login', (req, res) => {
                 res.status(200).send({token});
             } else {
                 errors.user = "Wrong credentials";
-                res.status(500).json(errors);
+                res.status(404).json(errors);
             }            
         }
     })
@@ -49,6 +49,7 @@ router.post('/login', (req, res) => {
 router.post('/register', (req, res) => {
     const errors = {};
     const {password, login, email } = req.body;
+    //Czy tutaj nie powinno być sprawdzenia czy już nie mamy uzytkownika o takim loginie i passwordzie?
     let hash;
     try {
         hash = crypto.createHash('md5').update(password).digest("hex");
@@ -67,7 +68,7 @@ router.post('/register', (req, res) => {
             })
         }
         else {
-            res.json(user) // { login, password } // { user: { login, password }}
+            res.json(user) 
         }
     })
 });

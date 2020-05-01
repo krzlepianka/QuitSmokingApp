@@ -1,18 +1,24 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 
 
-const NavBar = () => {
+const NavBar = (props) => {
+    const logoutUser = () => {
+        localStorage.removeItem('JWT_TOKEN');
+        props.history.push('/login');
+    }
     return(
-        <header className="header">
-            <ul className="header__list">
-                <li className="header__item"><Link className="header__link">Dziennik</Link></li>
-                <li className="header__item"><Link className="header__link">Wylogowanie</Link></li>            
-            </ul>
-        </header>
+        <div>
+            <header className="header">
+                <ul className="header__list">
+                    <li className="header__item" onClick={logoutUser}>Wyloguj</li>   
+                </ul>
+            </header>
+            {props.children}
+        </div>
     );
 }
 
 
 
-export default NavBar;
+export default withRouter(NavBar);

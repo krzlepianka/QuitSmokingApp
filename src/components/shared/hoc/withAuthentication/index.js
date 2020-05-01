@@ -1,16 +1,15 @@
 import React from 'react';
-import {Redirect, Route} from 'react-router-dom';
-import LoginForm from 'components/LoginForm';
-import UserPage from 'components/UserPage';
-import NavBar from 'components/NavBar';
+import {Redirect} from 'react-router-dom';
 
-const WithAuthentication = (PassedComponent) => {
+
+const withAuthentication = (PassedComponent) => {
     class AuthHOC extends React.Component {
         constructor(props) {
             super(props);
             this.state = { 
                 token: this.getToken(),
-                _id : null
+                _id : null,
+                isLogin: null
         };
         }
 
@@ -23,7 +22,8 @@ const WithAuthentication = (PassedComponent) => {
             } else {
                 const _id = response.data._id;
                 this.setState({
-                    _id
+                    _id,
+                    isLogin: true
                 })
             }
         }
@@ -46,11 +46,12 @@ const WithAuthentication = (PassedComponent) => {
 
             return token;
         }
+
         
         render() {
             if (!this.state.token) {
                 return <Redirect to="login" />;
-            }
+            }   
             return (
                 <div>
                     {this.state._id ? <PassedComponent _id={this.state._id} history={this.props.history}/> : null}
@@ -61,4 +62,4 @@ const WithAuthentication = (PassedComponent) => {
     return AuthHOC;
 } 
 
-export default WithAuthentication;
+export default withAuthentication;

@@ -1,7 +1,11 @@
 .setup {
     font-family: $main-font-size;
-    height: 100vh;
-    background-image: linear-gradient(to right, #8C1111, rgb(248, 58, 58));
+    background-image: linear-gradient(to right, $red-color-1, $red-color-2);
+    @include response(small) {
+        @include flex-box(column-reverse, center, center);
+        min-height: 100vh;
+    }
+    min-height: 100vh;
     @include flex-box(row, center, center); 
     &__form-container {
         @include flex-box(column, center, center); 
@@ -39,7 +43,7 @@
             width: 20rem;
             height: 4rem;
             color: $white-color;
-            background-image: linear-gradient(to right, rgb(140, 17, 17), rgb(247, 58, 58));
+            background-image: linear-gradient(to right, $red-color-1, $red-color-2);
             cursor: pointer;
             transition: ease-out 1s;
             &:hover {

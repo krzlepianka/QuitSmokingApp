@@ -15,6 +15,7 @@
 Notatki.txt
 
 # misc
+.env.server
 .env
 .DS_Store
 .env.local

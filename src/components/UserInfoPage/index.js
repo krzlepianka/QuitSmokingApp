@@ -176,31 +176,31 @@ class UserInfoPage extends React.Component {
                     <div className="users__item users_item--saved-life">
                         <img className="users__img users__img--save-money" src={saveMoneyImg} alt="money image" />
                         <h3 className="users__title">ile zaoszczędziłeś pieniędzy?</h3>
-                        <p className="users__info">{parseMoney(this.state.savedMoney)} zł</p>
+                        <p className="users__info paragraph-small">{parseMoney(this.state.savedMoney)} zł</p>
                     </div>
                     <div className="users__item users_item-saved-life">
                         <img className="users__img users__img--save-life" src={saveLifeImg} alt="heart image" />
                         <h3 className="users__title">o ile będziesz dłużej żył?</h3>
-                        <div class="users__container-info">
-                            <p className="users__info"> {parseDays(this.state.savedDays)} dni</p>
-                            <p className="users__info">{parseDays(this.state.savedHours)} godzin</p>
-                            <p className="users__info">{parseDays(this.state.savedMinutes)} minut</p >
-                            <p className="users__info">{parseDays(this.state.savedSeconds)} sekund</p>
+                        <div class="users__container-info users__container-info-expansion">
+                            <p className="users__info paragraph-small"> {parseDays(this.state.savedDays)} dni</p>
+                            <p className="users__info paragraph-small">{parseDays(this.state.savedHours)} godzin</p>
+                            <p className="users__info paragraph-small">{parseDays(this.state.savedMinutes)} minut</p >
+                            <p className="users__info paragraph-small">{parseDays(this.state.savedSeconds)} sekund</p>
                         </div>
                     </div>
                     <div className="users__item users_item--no-smoked-cigarets">
                         <img className="users__img users__img--saved-cigarets" src={noSmokingImg} alt="cigaret image" />   
                         <h3 className="users__title">ile papierosów udało Ci się nie zapalić?</h3>
-                        <p className="users__info">{parseNumber(this.state.notSmokingCigarets)} papierosa</p>
+                        <p className="users__info paragraph-small">{parseNumber(this.state.notSmokingCigarets)} papierosa</p>
                     </div>
                     <div className="users__item users_item--no-smoking-time">
                         <img className="users__img users__img--save-money" src={TimeImg} alt="clock image" />
                         <h3 className="users__title">Jak długo już nie palisz?</h3>
-                        <div class="users__container-info">
-                            <p className="users__info"> {parseDays(this.state.noSmokingDays)} dni</p>
-                            <p className="users__info">{parseDays(this.state.noSmokingHours)} godzin</p>
-                            <p className="users__info">{parseDays(this.state.noSmokingMinutes)} minut</p >
-                            <p className="users__info">{parseDays(this.state.noSmokingSeconds)} sekund</p>
+                        <div class="users__container-info users__container-info-expansion">
+                            <p className="users__info paragraph-small"> {parseDays(this.state.noSmokingDays)} dni</p>
+                            <p className="users__info paragraph-small">{parseDays(this.state.noSmokingHours)} godzin</p>
+                            <p className="users__info paragraph-small">{parseDays(this.state.noSmokingMinutes)} minut</p >
+                            <p className="users__info paragraph-small">{parseDays(this.state.noSmokingSeconds)} sekund</p>
                         </div>
                     </div>
                 </div>
