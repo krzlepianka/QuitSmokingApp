@@ -54,7 +54,7 @@ class LoginForm extends React.Component {
                     password: password,
                     email: email
                 }
-                fetch(`${process.env.REACT_APP_API}auth/login`, 
+                fetch(`${process.env.REACT_APP_API}/auth/login`, 
                     {
                     method: 'POST', 
                     headers: {

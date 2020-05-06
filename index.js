@@ -29,7 +29,12 @@ api.use('/user', userController);
 api.use('/auth', authController);
 app.use("/api", api);
 
-app.use(express.static(path.resolve('build')));
+try {
+    app.use(express.static(path.resolve('build')));
+}
+catch(err) {
+    console.error('must generate build folder')
+}
 
 app.listen(PORT, () => {
     console.log(`server is running on port ${PORT}`)

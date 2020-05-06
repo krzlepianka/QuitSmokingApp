@@ -15,7 +15,7 @@ class UserPage extends React.Component {
 }
 
    checkIfNewUser = () => {
-        fetch(`${process.env.REACT_APP_API}user`)
+        fetch(`${process.env.REACT_APP_API}/user`)
         .then(response => response.json())
         .catch(error => console.log('error', error))
         .then((users) => {
@@ -90,7 +90,7 @@ class UserPage extends React.Component {
                 duration, 
                 price
             }     
-        fetch(`${process.env.REACT_APP_API}user`,  {
+        fetch(`${process.env.REACT_APP_API}/user`,  {
             method: 'POST', // or 'PUT'
             headers: {
                 'Content-Type': 'application/json',

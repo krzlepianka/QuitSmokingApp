@@ -144,7 +144,7 @@ class RegistrationForm extends React.PureComponent {
                 password: this.state.password,
                 email: this.state.email
             }
-            fetch(`${process.env.REACT_APP_API}auth/register`, {
+            fetch(`${process.env.REACT_APP_API}/auth/register`, {
                 method: 'POST', 
                 headers: {
                     'Content-Type': 'application/json',

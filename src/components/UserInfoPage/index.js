@@ -27,7 +27,7 @@ class UserInfoPage extends React.Component {
     }
 
     getUserInformation = () => {
-        fetch(`${process.env.REACT_APP_API}user?id=${this.props._id}`)
+        fetch(`${process.env.REACT_APP_API}/user?id=${this.props._id}`)
         .then(response => response.json())
         .catch(error => console.log('error', error))
         .then(user => {
