@@ -30,8 +30,7 @@ const withAuthentication = (PassedComponent) => {
 
         getToken = () => {
             const token = localStorage.getItem('JWT_TOKEN');
-            const body = JSON.stringify({token});
-            fetch(`${process.env.REACT_APP_API}auth`, {
+            fetch(`${process.env.REACT_APP_API}/auth`, {
                 method: 'POST', // or 'PUT'
                 headers: {
                     'Content-Type': 'application/json',

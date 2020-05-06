@@ -39,8 +39,6 @@ class UserPage extends React.Component {
         })
     }
     validateNumberInput = (input) => {
-        let validValue = false;
-        let errorMessage = '';
         if(!input) {
             return 'uzupełnij pole'
         }
@@ -62,9 +60,6 @@ class UserPage extends React.Component {
 
     validateForm = () => {
         const {cigaretsPerDay, duration, price} = this.state;
-        let validCigaret = this.validateNumberInput(cigaretsPerDay);
-        let validDuration = this.validateNumberInput(duration);
-        let valiPrice = this.validateNumberInput(price);
         const errors = {
             cigaretsPerDay: this.validateNumberInput(cigaretsPerDay),
             duration: this.validateNumberInput(duration),

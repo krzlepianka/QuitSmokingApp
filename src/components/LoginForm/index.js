@@ -103,12 +103,12 @@ class LoginForm extends React.Component {
         let formsErrors = this.state.formsErrors;
         switch(name) {
             case 'login':
-            formsErrors.login = value.length < 5 && value.length > 0 || !value.length
+            formsErrors.login = (value.length < 5 && value.length > 0) || !value.length
             ? 'uzupełnij pole(minimum 6 znaków)' 
             : '';
             break;
             case 'password':
-            formsErrors.password = value.length < 5 && value.length > 0 || !value.length
+            formsErrors.password = (value.length < 5 && value.length > 0) || !value.length
             ? 'uzupełnij pole(minimum 6 znaków)'
             : '';
             break;
