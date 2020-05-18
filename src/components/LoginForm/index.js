@@ -12,10 +12,10 @@ class LoginForm extends React.Component {
                 
             }
         }
-        
         localStorage.removeItem('JWT_TOKEN');
     }
 
+    /* przerost formy bnad trescia */
     handleRedirectToLoginRegistrationForm = (path) => {
         this.props.history.push(path)
     }
@@ -25,7 +25,9 @@ class LoginForm extends React.Component {
         let loginError = formsErrors.login;
         let passwordError = formsErrors.password;
         let emailError = formsErrors.email;
-        if((loginError > 0 || loginError === undefined) || (passwordError > 0 || loginError === undefined)  || (emailError > 0 || loginError === undefined)) {
+        /* zrobic porzadek z warunkami logicznymi tak aby na pierwszy rzut oka bylo widac kiedy cos jest valid (np. array include, zdefiniowac gdzies jakie errory)*/
+        if((
+            loginError > 0 || loginError === undefined) || (passwordError > 0 || loginError === undefined)  || (emailError > 0 || loginError === undefined)) {
             valid = false;
             return valid;
         }
@@ -50,9 +52,9 @@ class LoginForm extends React.Component {
         const {login, password, email} = this.state;
         if(this.formValid(this.state)) {
                 let User = {
-                    login: login,
-                    password: password,
-                    email: email
+                    login,
+                    password,
+                    email
                 }
                 fetch(`${process.env.REACT_APP_API}/auth/login`, 
                     {
@@ -65,6 +67,7 @@ class LoginForm extends React.Component {
                         if(response.status > 400) {
                             let formsErrors = this.state.formsErrors;
                             formsErrors.credentials = 'podałeś błędne dane logowania';
+                            /* wrzucic wszystkie wiadomosci tekstowe do jakiegos pliku, nie hardcodowac ich */
                             this.setState({
                             formsErrors
                 })

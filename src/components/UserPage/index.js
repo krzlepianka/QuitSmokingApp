@@ -13,8 +13,8 @@ class UserPage extends React.Component {
         formValid: null
     }
 }
-
-   checkIfNewUser = () => {
+    /* przeniesc logike na back-end */
+    checkIfNewUser = () => {
         fetch(`${process.env.REACT_APP_API}/user`)
         .then(response => response.json())
         .catch(error => console.log('error', error))
@@ -86,7 +86,7 @@ class UserPage extends React.Component {
                 price
             }     
         fetch(`${process.env.REACT_APP_API}/user`,  {
-            method: 'POST', // or 'PUT'
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -127,7 +127,7 @@ class UserPage extends React.Component {
                             ile wypalasz papierosów na dzień
                         </label>
                         { errors['cigaretsPerDay'] && <label>{errors.cigaretsPerDay}</label> }
-                        <input 
+                        <input
                             className="form__input form__input--duration" 
                             onChange={this.handleChange} 
                             type='number'

@@ -3,7 +3,6 @@ import { setInterval } from 'timers';
 import parseNumber from 'helpers/parseNum';
 import parseMoney from 'helpers/parseMoney';
 import parseDays from 'helpers/parseDays';
-import { number } from 'prop-types';
 import saveMoneyImg from '../../styles/images/money.png';
 import saveLifeImg from '../../styles/images/heart.png';
 import noSmokingImg from '../../styles/images/smoking.png';
@@ -80,7 +79,6 @@ class UserInfoPage extends React.Component {
 
     calculateDifferenceDatesLife = (user=false) => {
         const currentUser = user || this.state.currentUser;
-        const oneCigaretPrice = (currentUser.price / currentUser.cigaretsPerDay);
         const setUpDate = this.state.currentUser.firstSetupDate;
         let convertedSetUpDate = new Date(setUpDate);
         let today = new Date();
@@ -108,7 +106,6 @@ class UserInfoPage extends React.Component {
         const OneCigaretLifeprice = 11 * 60;
         const smokingCigaretPerSec = (currentUser.cigaretsPerDay / 86400);
         const savedLifePerSec = OneCigaretLifeprice * smokingCigaretPerSec;
-        const test = savedLifePerSec * 1000;
         const days = savedLifePerSec / 60 / 60 / 24;
         const hours = savedLifePerSec / 60 / 60;
         const minutes = savedLifePerSec / 60;
@@ -123,7 +120,6 @@ class UserInfoPage extends React.Component {
 
     calculateDifferenceDatesnoSmokingCigarets = (user=false) => {
         const currentUser = user || this.state.currentUser;
-        const oneCigaretPrice = (currentUser.price / currentUser.cigaretsPerDay);
         const setUpDate = this.state.currentUser.firstSetupDate;
         let convertedSetUpDate = new Date(setUpDate);
         let today = new Date();
@@ -149,7 +145,6 @@ class UserInfoPage extends React.Component {
     }
 
     calculateDifferenceHowLongYouDontSmoke = (user=false) => {
-        const currentUser = user || this.state.currentUser;
         const setUpDate = this.state.currentUser.firstSetupDate;
         let convertedSetUpDate = new Date(setUpDate);
         let today = new Date();
@@ -174,14 +169,14 @@ class UserInfoPage extends React.Component {
             <div className="container">
                 <div className="users">
                     <div className="users__item users_item--saved-life">
-                        <img className="users__img users__img--save-money" src={saveMoneyImg} alt="money image" />
+                        <img className="users__img users__img--save-money" src={saveMoneyImg} alt="money" />
                         <h3 className="users__title">ile zaoszczędziłeś pieniędzy?</h3>
                         <p className="users__info paragraph-small">{parseMoney(this.state.savedMoney)} zł</p>
                     </div>
                     <div className="users__item users_item-saved-life">
-                        <img className="users__img users__img--save-life" src={saveLifeImg} alt="heart image" />
+                        <img className="users__img users__img--save-life" src={saveLifeImg} alt="heart" />
                         <h3 className="users__title">o ile będziesz dłużej żył?</h3>
-                        <div class="users__container-info users__container-info-expansion">
+                        <div className="users__container-info users__container-info-expansion">
                             <p className="users__info paragraph-small"> {parseDays(this.state.savedDays)} dni</p>
                             <p className="users__info paragraph-small">{parseDays(this.state.savedHours)} godzin</p>
                             <p className="users__info paragraph-small">{parseDays(this.state.savedMinutes)} minut</p >
@@ -189,14 +184,14 @@ class UserInfoPage extends React.Component {
                         </div>
                     </div>
                     <div className="users__item users_item--no-smoked-cigarets">
-                        <img className="users__img users__img--saved-cigarets" src={noSmokingImg} alt="cigaret image" />   
+                        <img className="users__img users__img--saved-cigarets" src={noSmokingImg} alt="cigaret" />   
                         <h3 className="users__title">ile papierosów udało Ci się nie zapalić?</h3>
                         <p className="users__info paragraph-small">{parseNumber(this.state.notSmokingCigarets)} papierosa</p>
                     </div>
                     <div className="users__item users_item--no-smoking-time">
-                        <img className="users__img users__img--save-money" src={TimeImg} alt="clock image" />
+                        <img className="users__img users__img--save-money" src={TimeImg} alt="clock" />
                         <h3 className="users__title">Jak długo już nie palisz?</h3>
-                        <div class="users__container-info users__container-info-expansion">
+                        <div className="users__container-info users__container-info-expansion">
                             <p className="users__info paragraph-small"> {parseDays(this.state.noSmokingDays)} dni</p>
                             <p className="users__info paragraph-small">{parseDays(this.state.noSmokingHours)} godzin</p>
                             <p className="users__info paragraph-small">{parseDays(this.state.noSmokingMinutes)} minut</p >

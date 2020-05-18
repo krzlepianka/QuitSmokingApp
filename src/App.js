@@ -27,5 +27,8 @@ class App extends Component {
   }
 }
 
+/*
+wyodrebnic wszystkie funkcje (side-effecty), ktore uderzaja do API, do jakiegos pliku, np. [nazwa-uslugi]Service
+*/
 
 export default App;

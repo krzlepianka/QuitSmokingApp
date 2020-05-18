@@ -1,11 +1,8 @@
-const User = require('../models/User');
-const express = require('express');
-const router = express.Router();
+const User = require('../user/userModel');
 const crypto= require('crypto'); 
 const jwt = require('jsonwebtoken');
 
-
-router.post('/login', (req, res) => {
+exports.Login = (req, res) => {
     const errors = {};
     const {login, password, email} = req.body;
     let hash;
@@ -44,12 +41,11 @@ router.post('/login', (req, res) => {
             }            
         }
     })
-});
+};
 
-router.post('/register', (req, res) => {
+exports.Register = (req, res) => {
     const errors = {};
     const {password, login, email } = req.body;
-    //Czy tutaj nie powinno być sprawdzenia czy już nie mamy uzytkownika o takim loginie i passwordzie?
     let hash;
     try {
         hash = crypto.createHash('md5').update(password).digest("hex");
@@ -63,18 +59,16 @@ router.post('/register', (req, res) => {
     newUser.save((err, user) => {
         if(err) {
             errors.user = err;
-            res.status(500).send({
-                errors
-            })
+            res.status(500).send('istnieje już użytkownik o takich danych. Rejestracja nie udana')
         }
         else {
-            res.json(user) 
+            res.status(200).json("rejestracja się udała. Możesz się teraz zalogować") 
         }
     })
-});
+};
 
 
-router.post('/', (req, res) => {
+exports.Authorization = (req, res) => {
     const { authorization } = req.headers; 
     const token = authorization.slice(7);
     jwt.verify(token, process.env.AUTH_SECRET, (err, decoded) => {
@@ -85,7 +79,4 @@ router.post('/', (req, res) => {
             res.json(decoded);
         }
     });
-});
-
-module.exports = router;
-
+};

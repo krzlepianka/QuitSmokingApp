@@ -1,13 +1,11 @@
 require('dotenv').config({ path: './.env.server'});
 const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const app = express();
-const api = express.Router();
-const mongoose = require('mongoose');
-const userController = require('./api/user');
-const authController = require('./api/auth');
-const path = require('path');
+    bodyParser = require('body-parser');
+    cors = require('cors');
+    app = express();
+    mongoose = require('mongoose');
+    path = require('path');
+    api = require('./api/index');
 
 const { PORT, DB_CONNECTION_STRING } = process.env;
 
@@ -25,8 +23,6 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 
-api.use('/user', userController);
-api.use('/auth', authController);
 app.use("/api", api);
 
 try {

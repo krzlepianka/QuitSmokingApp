@@ -19,6 +19,22 @@ const NavBar = (props) => {
     );
 }
 
+/*
+nie hardcodowac routow, przypisac do jakiegos JSowego albo JSONowego pliku konfiguracyjnego lub zmiennych srodowiskowych
+(ale lepiej config, bo bedziesz mogl go sobie do woli mapowac)
+
+routes.json 
+[
+    { pathname: "/login", label: 'Login"}
+]
+
+lub 
+
+routes.js 
+export default [
+    { pathname: "/login", label: 'Login", component: Login }
+]
+*/
 
 
 export default withRouter(NavBar);

@@ -14,10 +14,19 @@ const withAuthentication = (PassedComponent) => {
         }
 
         handleTokenAuth = (response, path) => {
+            /*
+            kiedy robisz zmiany w state po ukonczeniu funkcji asynchronicznej, upewniej sie wpierw, ze Twoj komponent jest wciaz zamontowany w DOMie
+            czyli:
+            componentDidMount() { this.mounted = true; }
+            componentWillUnmount(){ this.mounted = false; }
+
+            ...
+            this.mounted && this.setState(...)
+            */
             const redirectCases = ['TokenExpiredError', 'JsonWebTokenError'];
             if(redirectCases.includes(response.name)) {
                 this.props.history.push(path);
-                localStorage.removeItem("JWT_TOKEN");
+                localStorage.removeItem("JWT_TOKEN"); // hardcodowane, powinno byc przypisane do zmiennej srodowiskowej
 
             } else {
                 const _id = response.data._id;
@@ -51,11 +60,11 @@ const withAuthentication = (PassedComponent) => {
             if (!this.state.token) {
                 return <Redirect to="login" />;
             }   
-            return (
-                <div>
-                    {this.state._id ? <PassedComponent _id={this.state._id} history={this.props.history}/> : null}
-                </div>
-            )
+            if (this.state._id) {
+                return <PassedComponent _id={this.state._id} history={this.props.history}/>;
+            }
+
+            return null;
         }
     }
     return AuthHOC;

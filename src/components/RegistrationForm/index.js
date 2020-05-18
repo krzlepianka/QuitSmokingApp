@@ -20,15 +20,15 @@ class RegistrationForm extends React.PureComponent {
         valid: {
 
         },
-        successfulRegistrationMeassage: ''
+        registrationMessage: ''
     }
 
 
     componentDidUpdate = () => {
-        const {successfulRegistrationMeassage} = this.state;
-        if(successfulRegistrationMeassage !== '') {
+        const {registrationMessage} = this.state;
+        if(registrationMessage !== '') {
             setTimeout(() => this.setState({
-                successfulRegistrationMeassage: ''
+                registrationMessage: ''
             }), 5000)
         }
     }
@@ -137,6 +137,7 @@ class RegistrationForm extends React.PureComponent {
 
     handleSubmitForm = e => {
         e.preventDefault();
+        let registrationMessage = {};
         this.validateForm(e);
         if(this.state.formValid) {
             let newUser = {
@@ -149,27 +150,41 @@ class RegistrationForm extends React.PureComponent {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(newUser),
+                body: JSON.stringify(newUser)})
+                .then(res => {
+                    if(!res.ok) {
+                        throw new Error(res)
+                    }
+                    return res.json();
                 })
-                .then((response) => response.json())
+                .then(data => {
+                    this.setState({
+                        registrationMessage: data
+                    })
+                })
+                .catch(error => {
+                    console.dir(error)
+                    this.setState({
+                        registrationMessage: error.message
+                    })
+                })
+                
+                /*.then((response) => 
+                {response.json())
                 .then((data) => {
-                console.log('Success:', data);
+                    console.log('Success:', data);
+                    registrationMessage.success = 'Rejestracja się powiodła, możesz się zalogować';
                 })
                 .catch((error) => {
-                console.error('Error:', error);
-                });
-                this.setState({
-                    login: '',
-                    email: '',
-                    password: '',
-                    successfulRegistrationMeassage: 'Rejestracja się powiodła, możesz się zalogować'
-                })
+                    console.error('Error:', error);
+                    registrationMessage.error = "istnieje już użytkownik o takich danych. Spróbuj się zarejestrować raz jeszcze"
+                });*/
         }
     }
 
 
     render() {
-        const {login, email, password, errors, successfulRegistrationMeassage } = this.state;
+        const {login, email, password, errors, registrationMessage } = this.state;
         return(
             <div className="login">
                     <div className="login__container">
@@ -209,7 +224,7 @@ class RegistrationForm extends React.PureComponent {
                                         Zaloguj się
                                     </span>
                                 </p>
-                                {successfulRegistrationMeassage && <p className="paragpraph">{successfulRegistrationMeassage}</p>}
+                                {registrationMessage && <p className="paragpraph">{registrationMessage}</p>}
                             </form>
                         </div>
                     </div>
