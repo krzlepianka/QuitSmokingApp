@@ -1,5 +1,6 @@
 import React from 'react';
 import smokingLogo from '../../styles/images/ss.png';
+import * as errorMsg from '../shared/errorsMsgSetup/errorsMsgSetup';
 
 class LoginForm extends React.Component {
     constructor(props) {
@@ -15,10 +16,10 @@ class LoginForm extends React.Component {
         localStorage.removeItem('JWT_TOKEN');
     }
 
-    /* przerost formy bnad trescia */
     handleRedirectToLoginRegistrationForm = (path) => {
         this.props.history.push(path)
     }
+
     
     formValid = ({formsErrors, ...rest}) => {
         let valid = false;
@@ -40,7 +41,7 @@ class LoginForm extends React.Component {
     handleForm = (login, password, email) => {
         if(!login  && !password && !email) {
             let formsErrors = this.state.formsErrors;
-            formsErrors.credentials = 'uzupełnij wymagane pola';
+            formsErrors.credentials = errorMsg.fillForm;
             this.setState({
                 formsErrors
             })
@@ -107,17 +108,17 @@ class LoginForm extends React.Component {
         switch(name) {
             case 'login':
             formsErrors.login = (value.length < 5 && value.length > 0) || !value.length
-            ? 'uzupełnij pole(minimum 6 znaków)' 
+            ? errorMsg.wrongLoginRequires
             : '';
             break;
             case 'password':
             formsErrors.password = (value.length < 5 && value.length > 0) || !value.length
-            ? 'uzupełnij pole(minimum 6 znaków)'
+            ? errorMsg.wrongPasswordRequires
             : '';
             break;
             case 'email':
             formsErrors.email = emailRegex.test(value) !== true || !value.length
-            ? 'adres mailowy jest niepoprawny' 
+            ? errorMsg.wrongEmailRequires 
             : '';
             break;
             default:
