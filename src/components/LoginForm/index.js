@@ -9,9 +9,7 @@ class LoginForm extends React.Component {
             login: '', 
             password: '', 
             email: '', 
-            formsErrors: {
-                
-            }
+            formsErrors: {}
         }
         localStorage.removeItem('JWT_TOKEN');
     }
@@ -26,9 +24,11 @@ class LoginForm extends React.Component {
         let loginError = formsErrors.login;
         let passwordError = formsErrors.password;
         let emailError = formsErrors.email;
-        /* zrobic porzadek z warunkami logicznymi tak aby na pierwszy rzut oka bylo widac kiedy cos jest valid (np. array include, zdefiniowac gdzies jakie errory)*/
-        if((
-            loginError > 0 || loginError === undefined) || (passwordError > 0 || loginError === undefined)  || (emailError > 0 || loginError === undefined)) {
+        let arrayErrors = [loginError, passwordError, emailError];
+        let findErrors = arrayErrors.some(error => {
+            return error === undefined || error.length > 0 ? true : false;
+        })
+        if(findErrors) {
             valid = false;
             return valid;
         }
@@ -67,8 +67,7 @@ class LoginForm extends React.Component {
                     }).then(response => {
                         if(response.status > 400) {
                             let formsErrors = this.state.formsErrors;
-                            formsErrors.credentials = 'podałeś błędne dane logowania';
-                            /* wrzucic wszystkie wiadomosci tekstowe do jakiegos pliku, nie hardcodowac ich */
+                            formsErrors.credentials = errorMsg.wrongFormData
                             this.setState({
                             formsErrors
                 })
@@ -107,12 +106,12 @@ class LoginForm extends React.Component {
         let formsErrors = this.state.formsErrors;
         switch(name) {
             case 'login':
-            formsErrors.login = (value.length < 5 && value.length > 0) || !value.length
+            formsErrors.login = (value.length < 6 && value.length > 0) || !value.length
             ? errorMsg.wrongLoginRequires
             : '';
             break;
             case 'password':
-            formsErrors.password = (value.length < 5 && value.length > 0) || !value.length
+            formsErrors.password = (value.length < 6 && value.length > 0) || !value.length
             ? errorMsg.wrongPasswordRequires
             : '';
             break;

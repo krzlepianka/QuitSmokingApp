@@ -1,26 +1,25 @@
 import React, {Component} from 'react';
-import UserPage from 'components/UserPage';
-import UserInfoPage from 'components/UserInfoPage';
-import RegistrationForm from 'components/RegistrationForm';
-import LoginForm from 'components/LoginForm';
 import 'styles/mainStylesheet/mainStylesheet.scss';
 import {Switch, Route, Redirect} from 'react-router-dom';
-import WithAuthentication from 'components/shared/hoc/withAuthentication';
-import withNavbar from 'components/shared/hoc/withNavbar';
+import routes from './routes/index';
 
 
 class App extends Component {
   render() {
+    const testRoutes = routes.map(({path, component, exact}) => {
+      return <Route exact={exact} path={path} component={component} />
+    })
     return(
       <div>
         <Switch>
-          <Route path='/dashboard'  component={(WithAuthentication(withNavbar(UserInfoPage)))}/>
+          {testRoutes}
+          {/*<Route path='/dashboard'  component={(WithAuthentication(withNavbar(UserInfoPage)))}/>
           <Route path='/registration' component={RegistrationForm} />
           <Route path='/addicition-form' component={WithAuthentication(withNavbar(UserPage))}/>
           <Route path="/login" component={LoginForm} />
           <Route exact path="/" render={() => (
             <Redirect to="/login"/>
-          )}/>
+          )}/>*/}
         </Switch>
       </div>
     )

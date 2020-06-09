@@ -1,9 +1,8 @@
 import React from 'react';
 import smokingLogo from '../../styles/images/ss.png'
+import * as errorMsgSetup from './../shared/errorsMsgSetup/errorsMsgSetup';
 
 class RegistrationForm extends React.PureComponent {
-
-
     state = {
         login: '',
         password: '',
@@ -51,12 +50,12 @@ class RegistrationForm extends React.PureComponent {
         const {login} = this.state;
         if(!login) {
             validLogin = false;
-            errorLoginMessage = 'uzupełnij pole'
+            errorLoginMessage = errorMsgSetup.fillInput;
             return {validLogin, errorLoginMessage}
         }
-        if(login.length < 4) {
+        if(login.length < 6) {
             validLogin = false;
-            errorLoginMessage = 'login musi się składać z przynajmniej 4 znaków'
+            errorLoginMessage = errorMsgSetup.wrongLoginRequires;
             return {validLogin, errorLoginMessage}
         }
         else {
@@ -72,12 +71,12 @@ class RegistrationForm extends React.PureComponent {
         const {email} = this.state;
         if(!email) {
             validEmail = false;
-            errorEmailMeassage = 'uzupełnij pole'
+            errorEmailMeassage = errorMsgSetup.fillInput;
             return {validEmail, errorEmailMeassage}
         }
         else if(email.indexOf('@') === -1) {
             validEmail = false;
-            errorEmailMeassage = 'wpisz poprawny adres z @'
+            errorEmailMeassage = errorMsgSetup.wrongEmailRequires;
             return {validEmail, errorEmailMeassage}
         }
         else {
@@ -93,18 +92,18 @@ class RegistrationForm extends React.PureComponent {
         const {password} = this.state;
         if(!password) {
             validPassword = false;
-            errorPasswordMeassage = 'uzupełnij pole';
+            errorPasswordMeassage = errorMsgSetup.fillInput;
             return {validPassword, errorPasswordMeassage}
             
         }
         else if(password.indexOf(' ') !== -1) {
             validPassword = false;
-            errorPasswordMeassage = 'hasło nie może zawierać spacji';
+            errorPasswordMeassage = errorMsgSetup.whiteSpacePassword;
             return {validPassword, errorPasswordMeassage}
         }
-        else if(password.length < 8) {
+        else if(password.length < 6) {
             validPassword = false;
-            errorPasswordMeassage = 'hasło musi zawierać przynajmnije 8 znaków';
+            errorPasswordMeassage = errorMsgSetup.wrongPasswordRequires;
             return {validPassword, errorPasswordMeassage}
         }
         else {
@@ -128,16 +127,19 @@ class RegistrationForm extends React.PureComponent {
             validEmail: emailValidResult.validEmail,
             validPassword: passwordValidResult.validPassword
         }
+        let validArray = Object.keys(valid).map(key => {
+            return valid[key]
+        });
+        let checkValidArray = validArray.every(element => element === true);
         this.setState({
             valid, 
             errors,
-            formValid: valid.validLogin && valid.validEmail && valid.validPassword
+            formValid: checkValidArray
         })
     }
 
     handleSubmitForm = e => {
         e.preventDefault();
-        let registrationMessage = {};
         this.validateForm(e);
         if(this.state.formValid) {
             let newUser = {
@@ -163,22 +165,10 @@ class RegistrationForm extends React.PureComponent {
                     })
                 })
                 .catch(error => {
-                    console.dir(error)
                     this.setState({
                         registrationMessage: error.message
                     })
                 })
-                
-                /*.then((response) => 
-                {response.json())
-                .then((data) => {
-                    console.log('Success:', data);
-                    registrationMessage.success = 'Rejestracja się powiodła, możesz się zalogować';
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                    registrationMessage.error = "istnieje już użytkownik o takich danych. Spróbuj się zarejestrować raz jeszcze"
-                });*/
         }
     }
 
