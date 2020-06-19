@@ -14,6 +14,7 @@ class LoginForm extends React.Component {
         localStorage.removeItem('JWT_TOKEN');
     }
 
+
     handleRedirectToLoginRegistrationForm = (path) => {
         this.props.history.push(path)
     }
@@ -57,6 +58,13 @@ class LoginForm extends React.Component {
                     password,
                     email
                 }
+                this.setState({
+                    login: '',
+                    password: '',
+                    email: '',
+                    formsErrors: {}
+                })
+
                 fetch(`${process.env.REACT_APP_API}/auth/login`, 
                     {
                     method: 'POST', 
@@ -86,12 +94,7 @@ class LoginForm extends React.Component {
                         console.error('Error:', error)
                     });
     
-                    this.setState({
-                        login: '',
-                        password: '',
-                        email: '',
-                        formsErrors: {}
-                    })
+                    
             }
             else {
                 this.handleForm(login, password, email);

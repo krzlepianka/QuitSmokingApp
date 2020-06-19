@@ -5,15 +5,15 @@ class UserPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-        cigaretsPerDay: 0,
-        duration: 0,
-        price: 0,
-        valid: {},
-        errors: {},
-        formValid: null
+            cigaretsPerDay: 0,
+            duration: 0,
+            price: 0,
+            valid: {},
+            errors: {},
+            formValid: null
+        }
     }
-}
-    /* przeniesc logike na back-end */
+    
     checkIfNewUser = () => {
         fetch(`${process.env.REACT_APP_API}/user`)
         .then(response => response.json())

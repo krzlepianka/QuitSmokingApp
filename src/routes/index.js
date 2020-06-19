@@ -7,7 +7,7 @@ import WithAuthentication from 'components/shared/hoc/withAuthentication';
 import withNavbar from 'components/shared/hoc/withNavbar';
 
 const routes = [
-    {path: '/', exact: true, component: LoginForm},
+    {path: '/', exact: true, redirect: "/login"},
     {path: '/login', component: LoginForm},
     {path: '/registration', component: RegistrationForm},
     {path: '/addicition-form', component: WithAuthentication(withNavbar(UserPage))},

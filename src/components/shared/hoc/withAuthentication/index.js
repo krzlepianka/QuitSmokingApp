@@ -1,5 +1,6 @@
 import React from 'react';
 import {Redirect} from 'react-router-dom';
+import authService from '../../../../services/auth';
 
 
 const withAuthentication = (PassedComponent) => {
@@ -7,10 +8,19 @@ const withAuthentication = (PassedComponent) => {
         constructor(props) {
             super(props);
             this.state = { 
-                token: this.getToken(),
+                token: localStorage.getItem('JWT_TOKEN'),
                 _id : null,
                 isLogin: null
         };
+        }
+
+        componentDidMount() {
+            this.mounted = true;
+            authService.validateToken(this.state.token)
+            .then((data) => this.handleTokenAuth(data, '/login'))
+            .catch((error) => {
+                console.error('Error:', error)
+            });
         }
 
         handleTokenAuth = (response, path) => {
@@ -36,25 +46,6 @@ const withAuthentication = (PassedComponent) => {
                 })
             }
         }
-
-        getToken = () => {
-            const token = localStorage.getItem('JWT_TOKEN');
-            fetch(`${process.env.REACT_APP_API}/auth`, {
-                method: 'POST', // or 'PUT'
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            })
-            .then(response => response.json())
-            .then((data) => this.handleTokenAuth(data, '/login'))
-            .catch((error) => {
-                console.error('Error:', error)
-            });
-
-            return token;
-        }
-
         
         render() {
             if (!this.state.token) {

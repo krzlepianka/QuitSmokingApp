@@ -22,7 +22,7 @@ class RegistrationForm extends React.PureComponent {
         registrationMessage: ''
     }
 
-
+    //stwórz oddzielny komponent do wyswietlania info o popprawnej rejestracji i tam przerzuc funkcje
     componentDidUpdate = () => {
         const {registrationMessage} = this.state;
         if(registrationMessage !== '') {
