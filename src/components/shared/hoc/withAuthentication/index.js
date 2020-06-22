@@ -1,5 +1,6 @@
 import React from 'react';
 import {Redirect} from 'react-router-dom';
+import authService from '../../../../services/auth';
 
 
 const withAuthentication = (PassedComponent) => {
@@ -7,17 +8,35 @@ const withAuthentication = (PassedComponent) => {
         constructor(props) {
             super(props);
             this.state = { 
-                token: this.getToken(),
+                token: localStorage.getItem('JWT_TOKEN'),
                 _id : null,
                 isLogin: null
         };
         }
 
+        componentDidMount() {
+            this.mounted = true;
+            authService.validateToken(this.state.token)
+            .then((data) => this.handleTokenAuth(data, '/login'))
+            .catch((error) => {
+                console.error('Error:', error)
+            });
+        }
+
         handleTokenAuth = (response, path) => {
+            /*
+            kiedy robisz zmiany w state po ukonczeniu funkcji asynchronicznej, upewniej sie wpierw, ze Twoj komponent jest wciaz zamontowany w DOMie
+            czyli:
+            componentDidMount() { this.mounted = true; }
+            componentWillUnmount(){ this.mounted = false; }
+
+            ...
+            this.mounted && this.setState(...)
+            */
             const redirectCases = ['TokenExpiredError', 'JsonWebTokenError'];
             if(redirectCases.includes(response.name)) {
                 this.props.history.push(path);
-                localStorage.removeItem("JWT_TOKEN");
+                localStorage.removeItem("JWT_TOKEN"); // hardcodowane, powinno byc przypisane do zmiennej srodowiskowej
 
             } else {
                 const _id = response.data._id;
@@ -27,36 +46,16 @@ const withAuthentication = (PassedComponent) => {
                 })
             }
         }
-
-        getToken = () => {
-            const token = localStorage.getItem('JWT_TOKEN');
-            const body = JSON.stringify({token});
-            fetch(`${process.env.REACT_APP_API}auth`, {
-                method: 'POST', // or 'PUT'
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            })
-            .then(response => response.json())
-            .then((data) => this.handleTokenAuth(data, '/login'))
-            .catch((error) => {
-                console.error('Error:', error)
-            });
-
-            return token;
-        }
-
         
         render() {
             if (!this.state.token) {
                 return <Redirect to="login" />;
             }   
-            return (
-                <div>
-                    {this.state._id ? <PassedComponent _id={this.state._id} history={this.props.history}/> : null}
-                </div>
-            )
+            if (this.state._id) {
+                return <PassedComponent _id={this.state._id} history={this.props.history}/>;
+            }
+
+            return null;
         }
     }
     return AuthHOC;

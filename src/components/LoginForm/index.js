@@ -1,5 +1,6 @@
 import React from 'react';
 import smokingLogo from '../../styles/images/ss.png';
+import * as errorMsg from '../shared/errorsMsgSetup/errorsMsgSetup';
 
 class LoginForm extends React.Component {
     constructor(props) {
@@ -8,24 +9,27 @@ class LoginForm extends React.Component {
             login: '', 
             password: '', 
             email: '', 
-            formsErrors: {
-                
-            }
+            formsErrors: {}
         }
-        
         localStorage.removeItem('JWT_TOKEN');
     }
+
 
     handleRedirectToLoginRegistrationForm = (path) => {
         this.props.history.push(path)
     }
+
     
     formValid = ({formsErrors, ...rest}) => {
         let valid = false;
         let loginError = formsErrors.login;
         let passwordError = formsErrors.password;
         let emailError = formsErrors.email;
-        if((loginError > 0 || loginError === undefined) || (passwordError > 0 || loginError === undefined)  || (emailError > 0 || loginError === undefined)) {
+        let arrayErrors = [loginError, passwordError, emailError];
+        let findErrors = arrayErrors.some(error => {
+            return error === undefined || error.length > 0 ? true : false;
+        })
+        if(findErrors) {
             valid = false;
             return valid;
         }
@@ -38,7 +42,7 @@ class LoginForm extends React.Component {
     handleForm = (login, password, email) => {
         if(!login  && !password && !email) {
             let formsErrors = this.state.formsErrors;
-            formsErrors.credentials = 'uzupełnij wymagane pola';
+            formsErrors.credentials = errorMsg.fillForm;
             this.setState({
                 formsErrors
             })
@@ -50,11 +54,18 @@ class LoginForm extends React.Component {
         const {login, password, email} = this.state;
         if(this.formValid(this.state)) {
                 let User = {
-                    login: login,
-                    password: password,
-                    email: email
+                    login,
+                    password,
+                    email
                 }
-                fetch(`${process.env.REACT_APP_API}auth/login`, 
+                this.setState({
+                    login: '',
+                    password: '',
+                    email: '',
+                    formsErrors: {}
+                })
+
+                fetch(`${process.env.REACT_APP_API}/auth/login`, 
                     {
                     method: 'POST', 
                     headers: {
@@ -64,7 +75,7 @@ class LoginForm extends React.Component {
                     }).then(response => {
                         if(response.status > 400) {
                             let formsErrors = this.state.formsErrors;
-                            formsErrors.credentials = 'podałeś błędne dane logowania';
+                            formsErrors.credentials = errorMsg.wrongFormData
                             this.setState({
                             formsErrors
                 })
@@ -83,12 +94,7 @@ class LoginForm extends React.Component {
                         console.error('Error:', error)
                     });
     
-                    this.setState({
-                        login: '',
-                        password: '',
-                        email: '',
-                        formsErrors: {}
-                    })
+                    
             }
             else {
                 this.handleForm(login, password, email);
@@ -103,18 +109,18 @@ class LoginForm extends React.Component {
         let formsErrors = this.state.formsErrors;
         switch(name) {
             case 'login':
-            formsErrors.login = value.length < 5 && value.length > 0 || !value.length
-            ? 'uzupełnij pole(minimum 6 znaków)' 
+            formsErrors.login = (value.length < 6 && value.length > 0) || !value.length
+            ? errorMsg.wrongLoginRequires
             : '';
             break;
             case 'password':
-            formsErrors.password = value.length < 5 && value.length > 0 || !value.length
-            ? 'uzupełnij pole(minimum 6 znaków)'
+            formsErrors.password = (value.length < 6 && value.length > 0) || !value.length
+            ? errorMsg.wrongPasswordRequires
             : '';
             break;
             case 'email':
             formsErrors.email = emailRegex.test(value) !== true || !value.length
-            ? 'adres mailowy jest niepoprawny' 
+            ? errorMsg.wrongEmailRequires 
             : '';
             break;
             default:

@@ -20,5 +20,4 @@ const NavBar = (props) => {
 }
 
 
-
 export default withRouter(NavBar);

@@ -1,9 +1,8 @@
 import React from 'react';
 import smokingLogo from '../../styles/images/ss.png'
+import * as errorMsgSetup from './../shared/errorsMsgSetup/errorsMsgSetup';
 
 class RegistrationForm extends React.PureComponent {
-
-
     state = {
         login: '',
         password: '',
@@ -20,15 +19,15 @@ class RegistrationForm extends React.PureComponent {
         valid: {
 
         },
-        successfulRegistrationMeassage: ''
+        registrationMessage: ''
     }
 
-
+    //stwórz oddzielny komponent do wyswietlania info o popprawnej rejestracji i tam przerzuc funkcje
     componentDidUpdate = () => {
-        const {successfulRegistrationMeassage} = this.state;
-        if(successfulRegistrationMeassage !== '') {
+        const {registrationMessage} = this.state;
+        if(registrationMessage !== '') {
             setTimeout(() => this.setState({
-                successfulRegistrationMeassage: ''
+                registrationMessage: ''
             }), 5000)
         }
     }
@@ -51,12 +50,12 @@ class RegistrationForm extends React.PureComponent {
         const {login} = this.state;
         if(!login) {
             validLogin = false;
-            errorLoginMessage = 'uzupełnij pole'
+            errorLoginMessage = errorMsgSetup.fillInput;
             return {validLogin, errorLoginMessage}
         }
-        if(login.length < 4) {
+        if(login.length < 6) {
             validLogin = false;
-            errorLoginMessage = 'login musi się składać z przynajmniej 4 znaków'
+            errorLoginMessage = errorMsgSetup.wrongLoginRequires;
             return {validLogin, errorLoginMessage}
         }
         else {
@@ -72,12 +71,12 @@ class RegistrationForm extends React.PureComponent {
         const {email} = this.state;
         if(!email) {
             validEmail = false;
-            errorEmailMeassage = 'uzupełnij pole'
+            errorEmailMeassage = errorMsgSetup.fillInput;
             return {validEmail, errorEmailMeassage}
         }
         else if(email.indexOf('@') === -1) {
             validEmail = false;
-            errorEmailMeassage = 'wpisz poprawny adres z @'
+            errorEmailMeassage = errorMsgSetup.wrongEmailRequires;
             return {validEmail, errorEmailMeassage}
         }
         else {
@@ -93,18 +92,18 @@ class RegistrationForm extends React.PureComponent {
         const {password} = this.state;
         if(!password) {
             validPassword = false;
-            errorPasswordMeassage = 'uzupełnij pole';
+            errorPasswordMeassage = errorMsgSetup.fillInput;
             return {validPassword, errorPasswordMeassage}
             
         }
         else if(password.indexOf(' ') !== -1) {
             validPassword = false;
-            errorPasswordMeassage = 'hasło nie może zawierać spacji';
+            errorPasswordMeassage = errorMsgSetup.whiteSpacePassword;
             return {validPassword, errorPasswordMeassage}
         }
-        else if(password.length < 8) {
+        else if(password.length < 6) {
             validPassword = false;
-            errorPasswordMeassage = 'hasło musi zawierać przynajmnije 8 znaków';
+            errorPasswordMeassage = errorMsgSetup.wrongPasswordRequires;
             return {validPassword, errorPasswordMeassage}
         }
         else {
@@ -128,10 +127,14 @@ class RegistrationForm extends React.PureComponent {
             validEmail: emailValidResult.validEmail,
             validPassword: passwordValidResult.validPassword
         }
+        let validArray = Object.keys(valid).map(key => {
+            return valid[key]
+        });
+        let checkValidArray = validArray.every(element => element === true);
         this.setState({
             valid, 
             errors,
-            formValid: valid.validLogin && valid.validEmail && valid.validPassword
+            formValid: checkValidArray
         })
     }
 
@@ -144,32 +147,34 @@ class RegistrationForm extends React.PureComponent {
                 password: this.state.password,
                 email: this.state.email
             }
-            fetch(`${process.env.REACT_APP_API}auth/register`, {
+            fetch(`${process.env.REACT_APP_API}/auth/register`, {
                 method: 'POST', 
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(newUser),
+                body: JSON.stringify(newUser)})
+                .then(res => {
+                    if(!res.ok) {
+                        throw new Error(res)
+                    }
+                    return res.json();
                 })
-                .then((response) => response.json())
-                .then((data) => {
-                console.log('Success:', data);
+                .then(data => {
+                    this.setState({
+                        registrationMessage: data
+                    })
                 })
-                .catch((error) => {
-                console.error('Error:', error);
-                });
-                this.setState({
-                    login: '',
-                    email: '',
-                    password: '',
-                    successfulRegistrationMeassage: 'Rejestracja się powiodła, możesz się zalogować'
+                .catch(error => {
+                    this.setState({
+                        registrationMessage: error.message
+                    })
                 })
         }
     }
 
 
     render() {
-        const {login, email, password, errors, successfulRegistrationMeassage } = this.state;
+        const {login, email, password, errors, registrationMessage } = this.state;
         return(
             <div className="login">
                     <div className="login__container">
@@ -209,7 +214,7 @@ class RegistrationForm extends React.PureComponent {
                                         Zaloguj się
                                     </span>
                                 </p>
-                                {successfulRegistrationMeassage && <p className="paragpraph">{successfulRegistrationMeassage}</p>}
+                                {registrationMessage && <p className="paragpraph">{registrationMessage}</p>}
                             </form>
                         </div>
                     </div>

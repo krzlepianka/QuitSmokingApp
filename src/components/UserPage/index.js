@@ -5,17 +5,17 @@ class UserPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-        cigaretsPerDay: 0,
-        duration: 0,
-        price: 0,
-        valid: {},
-        errors: {},
-        formValid: null
+            cigaretsPerDay: 0,
+            duration: 0,
+            price: 0,
+            valid: {},
+            errors: {},
+            formValid: null
+        }
     }
-}
-
-   checkIfNewUser = () => {
-        fetch(`${process.env.REACT_APP_API}user`)
+    
+    checkIfNewUser = () => {
+        fetch(`${process.env.REACT_APP_API}/user`)
         .then(response => response.json())
         .catch(error => console.log('error', error))
         .then((users) => {
@@ -39,8 +39,6 @@ class UserPage extends React.Component {
         })
     }
     validateNumberInput = (input) => {
-        let validValue = false;
-        let errorMessage = '';
         if(!input) {
             return 'uzupełnij pole'
         }
@@ -62,9 +60,6 @@ class UserPage extends React.Component {
 
     validateForm = () => {
         const {cigaretsPerDay, duration, price} = this.state;
-        let validCigaret = this.validateNumberInput(cigaretsPerDay);
-        let validDuration = this.validateNumberInput(duration);
-        let valiPrice = this.validateNumberInput(price);
         const errors = {
             cigaretsPerDay: this.validateNumberInput(cigaretsPerDay),
             duration: this.validateNumberInput(duration),
@@ -90,8 +85,8 @@ class UserPage extends React.Component {
                 duration, 
                 price
             }     
-        fetch(`${process.env.REACT_APP_API}user`,  {
-            method: 'POST', // or 'PUT'
+        fetch(`${process.env.REACT_APP_API}/user`,  {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -132,7 +127,7 @@ class UserPage extends React.Component {
                             ile wypalasz papierosów na dzień
                         </label>
                         { errors['cigaretsPerDay'] && <label>{errors.cigaretsPerDay}</label> }
-                        <input 
+                        <input
                             className="form__input form__input--duration" 
                             onChange={this.handleChange} 
                             type='number'
